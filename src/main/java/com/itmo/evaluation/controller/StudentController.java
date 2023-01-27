@@ -4,7 +4,7 @@ import com.itmo.evaluation.common.BaseResponse;
 import com.itmo.evaluation.common.ErrorCode;
 import com.itmo.evaluation.common.ResultUtils;
 import com.itmo.evaluation.exception.BusinessException;
-import com.itmo.evaluation.model.dto.StudentLoginRequest;
+import com.itmo.evaluation.model.dto.student.StudentLoginRequest;
 import com.itmo.evaluation.model.vo.StudentVo;
 import com.itmo.evaluation.service.StudentService;
 import lombok.extern.slf4j.Slf4j;

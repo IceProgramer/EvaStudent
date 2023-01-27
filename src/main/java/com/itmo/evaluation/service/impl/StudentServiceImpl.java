@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmo.evaluation.common.ErrorCode;
 import com.itmo.evaluation.exception.BusinessException;
 import com.itmo.evaluation.mapper.BlackHouseMapper;
-import com.itmo.evaluation.model.dto.StudentLoginRequest;
+import com.itmo.evaluation.model.dto.student.StudentLoginRequest;
 import com.itmo.evaluation.model.entity.BlackHouse;
 import com.itmo.evaluation.model.entity.Student;
 import com.itmo.evaluation.model.vo.StudentVo;

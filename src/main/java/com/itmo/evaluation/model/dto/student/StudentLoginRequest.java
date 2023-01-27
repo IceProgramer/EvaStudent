@@ -1,4 +1,4 @@
-package com.itmo.evaluation.model.dto;
+package com.itmo.evaluation.model.dto.student;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

@@ -1,6 +1,6 @@
 package com.itmo.evaluation.service;
 
-import com.itmo.evaluation.model.dto.StudentLoginRequest;
+import com.itmo.evaluation.model.dto.student.StudentLoginRequest;
 import com.itmo.evaluation.model.entity.Student;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itmo.evaluation.model.vo.StudentVo;
