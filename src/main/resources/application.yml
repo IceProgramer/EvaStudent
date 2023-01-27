@@ -1,6 +1,6 @@
 spring:
   application:
-    name: eva
+    name: evaluation
   # DataSource Config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,8 +21,6 @@ spring:
 #    database: 0
 server:
   port: 8080
-  servlet:
-    context-path: /api
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false

@@ -2,6 +2,7 @@ package com.itmo.evaluation.mapper;
 
 import com.itmo.evaluation.model.entity.Student;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
 * @author chenjiahan
@@ -11,6 +12,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface StudentMapper extends BaseMapper<Student> {
 
+
+    @Select("select * from e_student where sid = #{sid}")
+    Student getStudentBySid(String sid);
 }
 
 

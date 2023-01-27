@@ -1,7 +1,10 @@
 package com.itmo.evaluation.service;
 
+import com.itmo.evaluation.model.dto.StudentLoginRequest;
 import com.itmo.evaluation.model.entity.Student;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
 * @author chenjiahan
@@ -13,4 +16,10 @@ public interface StudentService extends IService<Student> {
     /**
      * 学生登陆
      */
+    String studentLogin(StudentLoginRequest studentLoginRequest, HttpServletRequest request);
+
+    /**
+     * 获取登陆学生信息
+     */
+
 }

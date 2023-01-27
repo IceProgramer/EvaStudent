@@ -1,13 +1,16 @@
 package com.itmo.evaluation;
 
+
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EvaStudentApplication {
-
+@MapperScan("com.itmo.evaluation.mapper")
+public class EvaluationApplication {
+    
     public static void main(String[] args) {
-        SpringApplication.run(EvaStudentApplication.class, args);
+        SpringApplication.run(EvaluationApplication.class, args);
     }
 
 }

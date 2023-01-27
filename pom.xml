@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.itmo</groupId>
-    <artifactId>eva</artifactId>
+    <artifactId>evaluation</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Teaching-Evaluating-System</name>
+    <name>Teaching-evaluationluating-System</name>
     <description>教学评价系统（管理员）</description>
     <properties>
         <java.version>1.8</java.version>

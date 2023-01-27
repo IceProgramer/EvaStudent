@@ -1,6 +1,6 @@
 package com.itmo.evaluation.exception;
 
-import com.itmo.eva.common.ErrorCode;
+import com.itmo.evaluation.common.ErrorCode;
 
 /**
  * 自定义异常类

@@ -1,6 +1,6 @@
-package com.itmo.evaluation.config;//package com.itmo.eva.config;
+package com.itmo.evaluation.config;//package com.itmo.evaluation.config;
 //
-//import com.itmo.eva.intercepts.PermissionIntercept;
+//import com.itmo.evaluation.intercepts.PermissionIntercept;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 //import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

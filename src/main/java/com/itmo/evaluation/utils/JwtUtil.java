@@ -20,7 +20,7 @@ import java.util.Map;
 public class JwtUtil {
 
     private static final long TIME = 60 * 60 * 1000;     //设置过期时间
-    private static final String SIGNATURE = "EduEvaluationSystem";
+    private static final String SIGNATURE = "EduevaluationSystem";
 
     /**
      * 生成token

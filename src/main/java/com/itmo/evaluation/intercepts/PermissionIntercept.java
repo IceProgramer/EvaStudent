@@ -3,7 +3,7 @@ package com.itmo.evaluation.intercepts;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.itmo.eva.utils.JwtUtil;
+import com.itmo.evaluation.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
