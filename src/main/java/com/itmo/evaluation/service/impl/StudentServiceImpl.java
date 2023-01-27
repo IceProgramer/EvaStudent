@@ -1,5 +1,6 @@
 package com.itmo.evaluation.service.impl;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmo.evaluation.common.ErrorCode;
@@ -8,12 +9,14 @@ import com.itmo.evaluation.mapper.BlackHouseMapper;
 import com.itmo.evaluation.model.dto.StudentLoginRequest;
 import com.itmo.evaluation.model.entity.BlackHouse;
 import com.itmo.evaluation.model.entity.Student;
+import com.itmo.evaluation.model.vo.StudentVo;
 import com.itmo.evaluation.service.StudentService;
 import com.itmo.evaluation.mapper.StudentMapper;
 import com.itmo.evaluation.utils.JwtUtil;
 import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
 import net.dreamlu.mica.ip2region.core.IpInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -100,6 +103,25 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
 
         return token;
     }
+
+    @Override
+    public StudentVo getLoginStudent(String token) {
+        // 对传回来的token进行解析 -> 解析出token中对应用户的id
+        DecodedJWT decodedJWT = JwtUtil.decodeToken(token);
+        Integer id = Integer.valueOf(decodedJWT.getClaim("id").asString());
+
+        Student student = baseMapper.selectById(id);
+
+        if (student == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+        }
+
+        StudentVo studentInfo = new StudentVo();
+        BeanUtils.copyProperties(student, studentInfo);
+
+        return studentInfo;
+    }
+
 
     /**
      * 获取用户登陆ip
