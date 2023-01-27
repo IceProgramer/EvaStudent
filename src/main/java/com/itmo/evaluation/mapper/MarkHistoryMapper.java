@@ -22,6 +22,9 @@ public interface MarkHistoryMapper extends BaseMapper<MarkHistory> {
      */
     @Select("select * from e_mark_history where eid = #{eid} and aid = #{studentId}")
     List<MarkHistory> getByEidAndStudentId(Integer eid, Integer studentId);
+
+    @Select("select * from e_mark_history where aid = #{studentId}")
+    List<MarkHistory> getByStudentId(Integer studentId);
 }
 
 
