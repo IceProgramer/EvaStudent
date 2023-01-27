@@ -40,4 +40,34 @@ class evaluationStudentApplicationTests {
         System.out.println(collect);
     }
 
+    @Test
+    void push() {
+
+
+        // 每个cid一定相同
+        Integer cid = 1;
+        String courseName = courseMapper.selectById(cid).getCName();
+
+        // 根据课程名称来获取所有的课程id 【例如Java有可能是1，2，3】
+        List<Integer> courseIdList = courseMapper.getCourseIdByName(courseName);
+
+
+        Integer studentId = 3;
+        Integer sid = 1;
+        Integer score = 43;
+        Integer eid = 1;
+        Integer tid = 1;
+
+        List<MarkHistory> markHistoryList = markHistoryMapper.getByAidAndSidAndEidAndTid(studentId, sid, eid, tid);
+        // 找到与课程匹配的记录
+        List<MarkHistory> markHistories = markHistoryList.stream()
+                .filter(markHistory -> courseIdList.contains(markHistory.getCid()))
+                .collect(Collectors.toList());
+
+        MarkHistory markHistory = markHistories.get(0);
+        markHistory.setScore(score);
+        markHistory.setState(1);
+        System.out.println(markHistory);
+    }
+
 }

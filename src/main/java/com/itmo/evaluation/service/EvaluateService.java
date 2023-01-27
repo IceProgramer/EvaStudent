@@ -1,5 +1,6 @@
 package com.itmo.evaluation.service;
 
+import com.itmo.evaluation.model.dto.evaluation.EvaluationPushRequest;
 import com.itmo.evaluation.model.vo.Evaluate.EvaluateTeacherVo;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface EvaluateService {
      */
     List<EvaluateTeacherVo> listAllTeacher(Integer cid, String token);
 
+    /**
+     * 提交评测
+     */
+    Boolean pushEvaluation(List<EvaluationPushRequest> evaluationPushRequestList, String token);
 }

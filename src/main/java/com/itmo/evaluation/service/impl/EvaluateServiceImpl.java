@@ -1,11 +1,13 @@
 package com.itmo.evaluation.service.impl;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.google.common.collect.Lists;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.itmo.evaluation.common.ResultUtils;
 import com.itmo.evaluation.mapper.CourseMapper;
 import com.itmo.evaluation.mapper.MarkHistoryMapper;
 import com.itmo.evaluation.mapper.SystemMapper;
 import com.itmo.evaluation.mapper.TeacherMapper;
+import com.itmo.evaluation.model.dto.evaluation.EvaluationPushRequest;
 import com.itmo.evaluation.model.entity.MarkHistory;
 import com.itmo.evaluation.model.entity.System;
 import com.itmo.evaluation.model.entity.Teacher;
@@ -69,8 +71,6 @@ public class EvaluateServiceImpl implements EvaluateService {
             evaluateTeacherVo.setTeacher(teacher.getName());
             evaluateTeacherVo.setIdentity(teacher.getIdentity());
 
-//            evaluateTeacherVo.setEvaluation(Lists.newArrayList());
-
             // 获取该老师的所有一级评价
             List<MarkHistory> systemList = markList.stream().filter(mark -> mark.getTid().equals(teacherId))
                     .collect(Collectors.toList());
@@ -104,4 +104,39 @@ public class EvaluateServiceImpl implements EvaluateService {
         }
         return evaluateTeacherVoList;
     }
+
+    @Override
+    public Boolean pushEvaluation(List<EvaluationPushRequest> evaluationPushRequestList, String token) {
+        // 解析token中的studentId
+        DecodedJWT decodedJWT = JwtUtil.decodeToken(token);
+        Integer studentId = Integer.valueOf(decodedJWT.getClaim("id").asString());
+
+        // 每个cid一定相同
+        Integer cid = evaluationPushRequestList.get(0).getCid();
+        String courseName = courseMapper.selectById(cid).getCName();
+
+        // 根据课程名称来获取所有的课程id 【例如Java有可能是1，2，3】
+        List<Integer> courseIdList = courseMapper.getCourseIdByName(courseName);
+
+        // 遍历课程中的每一个教师信息 [tid, sid, score, eid, cid]
+        for (EvaluationPushRequest evaluationPushRequest : evaluationPushRequestList) {
+            Integer sid = evaluationPushRequest.getSid();   // 一级评价id
+            Integer score = evaluationPushRequest.getScore();   // 一级评价分数
+            Integer eid = evaluationPushRequest.getEid();   // 本次eid
+            Integer tid = evaluationPushRequest.getTid();   // 教师id
+
+            List<MarkHistory> markHistoryList = markHistoryMapper.getByAidAndSidAndEidAndTid(studentId, sid, eid, tid);
+            // 找到与课程匹配的记录
+            List<MarkHistory> markHistories = markHistoryList.stream()
+                    .filter(markHistory -> courseIdList.contains(markHistory.getCid()))
+                    .collect(Collectors.toList());
+
+            MarkHistory markHistory = markHistories.get(0);
+            markHistory.setScore(score);
+            markHistory.setState(1);
+            markHistoryMapper.updateById(markHistory);
+        }
+        return true;
+    }
+
 }

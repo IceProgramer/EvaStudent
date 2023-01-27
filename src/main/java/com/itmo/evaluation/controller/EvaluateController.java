@@ -1,8 +1,11 @@
 package com.itmo.evaluation.controller;
 
+import com.itmo.evaluation.common.BaseResponse;
 import com.itmo.evaluation.common.ErrorCode;
+import com.itmo.evaluation.common.ResultUtils;
 import com.itmo.evaluation.exception.BusinessException;
 import com.itmo.evaluation.model.dto.course.CourseRequest;
+import com.itmo.evaluation.model.dto.evaluation.EvaluationPushRequest;
 import com.itmo.evaluation.model.dto.evaluation.EvaluationRequest;
 import com.itmo.evaluation.model.vo.Evaluate.EvaluateTeacherVo;
 import com.itmo.evaluation.model.vo.EvaluateIdVo;
@@ -31,13 +34,21 @@ public class EvaluateController {
      * @return 教师信息
      */
     @PostMapping("/teacher/list")
-    public List<EvaluateTeacherVo> getAllTeacherInfo(@RequestHeader("token") String token, @RequestBody EvaluationRequest evaluationRequest) {
+    public BaseResponse<List<EvaluateTeacherVo>> getAllTeacherInfo(@RequestHeader("token") String token, @RequestBody EvaluationRequest evaluationRequest) {
         if (evaluationRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
         }
         Integer cid = evaluationRequest.getCid();
         List<EvaluateTeacherVo> evaluateTeacherVoList = evaluateService.listAllTeacher(cid, token);
-        return evaluateTeacherVoList;
+        return ResultUtils.success(evaluateTeacherVoList);
+    }
+
+    @PostMapping("/push")
+    public BaseResponse<Boolean> pushEvaluation(@RequestHeader("token") String token, @RequestBody List<EvaluationPushRequest> evaluationPushRequestList) {
+
+        Boolean save = evaluateService.pushEvaluation(evaluationPushRequestList, token);
+
+        return ResultUtils.success(save);
     }
 
 }

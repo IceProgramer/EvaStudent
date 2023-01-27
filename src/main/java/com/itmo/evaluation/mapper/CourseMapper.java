@@ -19,6 +19,7 @@ public interface CourseMapper extends BaseMapper<Course> {
 
     @Select("select id from e_course where cName =#{name}")
     List<Integer> getCourseIdByName(String name);
+
 }
 
 
