@@ -4,11 +4,9 @@ import com.itmo.evaluation.common.BaseResponse;
 import com.itmo.evaluation.common.ErrorCode;
 import com.itmo.evaluation.common.ResultUtils;
 import com.itmo.evaluation.exception.BusinessException;
-import com.itmo.evaluation.model.dto.course.CourseRequest;
 import com.itmo.evaluation.model.dto.evaluation.EvaluationPushRequest;
 import com.itmo.evaluation.model.dto.evaluation.EvaluationRequest;
 import com.itmo.evaluation.model.vo.Evaluate.EvaluateTeacherVo;
-import com.itmo.evaluation.model.vo.EvaluateIdVo;
 import com.itmo.evaluation.service.EvaluateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +38,9 @@ public class EvaluateController {
         }
         Integer cid = evaluationRequest.getCid();
         List<EvaluateTeacherVo> evaluateTeacherVoList = evaluateService.listAllTeacher(cid, token);
+        if (evaluateTeacherVoList == null) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "您没有该课程信息");
+        }
         return ResultUtils.success(evaluateTeacherVoList);
     }
 

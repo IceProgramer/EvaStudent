@@ -8,12 +8,14 @@ import com.itmo.evaluation.mapper.CourseMapper;
 import com.itmo.evaluation.mapper.EvaluateMapper;
 import com.itmo.evaluation.mapper.MarkHistoryMapper;
 import com.itmo.evaluation.model.entity.Course;
+import com.itmo.evaluation.model.entity.Evaluate;
 import com.itmo.evaluation.model.entity.MarkHistory;
 import com.itmo.evaluation.model.vo.CourseVo;
 import com.itmo.evaluation.model.vo.EvaluateIdVo;
 import com.itmo.evaluation.service.CourseService;
 import com.itmo.evaluation.utils.JwtUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -43,6 +45,10 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
      */
     @Override
     public List<CourseVo> getUndoneCourse(String token, Integer eid) {
+        Evaluate evaluate = evaluateMapper.selectById(eid);
+        if (evaluate == null) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "评测不存在");
+        }
         // 解析出学生id
         DecodedJWT decodedJWT = JwtUtil.decodeToken(token);
         Integer studentId = Integer.valueOf(decodedJWT.getClaim("id").asString());
@@ -78,6 +84,10 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Override
     public List<CourseVo> getDoneCourse(String token, Integer eid) {
+        Evaluate evaluate = evaluateMapper.selectById(eid);
+        if (evaluate == null) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "评测不存在");
+        }
         // 解析出学生id
         DecodedJWT decodedJWT = JwtUtil.decodeToken(token);
         Integer studentId = Integer.valueOf(decodedJWT.getClaim("id").asString());
@@ -92,7 +102,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
             // 获取当前课程的所有回答状态
             List<Integer> stateList = course.stream().filter(single -> Objects.equals(single.getCid(), courseId)).map(MarkHistory::getState).collect(Collectors.toList());
             // 若该课程中有一项一级指标的state为1，说明该课程评价未完成
-            if (stateList.contains(1)) {
+            if (!stateList.contains(0)) {
                 Course courseInfo = courseMapper.selectById(courseId);
                 CourseVo courseVo = new CourseVo();
                 courseVo.setCid(courseId);
@@ -102,6 +112,9 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
             }
         }
         List<CourseVo> courseInfoList = new ArrayList<>();
+        if (courseVoList.size() == 0) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "暂无完成课程");
+        }
         courseInfoList.add(courseVoList.get(0));
         for (int i = 1; i < courseVoList.size(); i++) {
             if (!Objects.equals(courseVoList.get(i).getCName(), courseVoList.get(i - 1).getCName())) {

@@ -24,4 +24,11 @@ public interface StudentService extends IService<Student> {
      */
     StudentVo getLoginStudent(String token);
 
+    /**
+     * 获取用户ip地址
+     * @param request 网路请求
+     * @return ip地址
+     */
+    String getIpAddr(HttpServletRequest request);
+
 }

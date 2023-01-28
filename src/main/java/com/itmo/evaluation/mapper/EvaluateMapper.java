@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Select;
 */
 public interface EvaluateMapper extends BaseMapper<Evaluate> {
 
-    @Select("select * from e_evaluate where status = 1")
+    @Select("select id from e_evaluate where status = 1")
     Integer getNowEid();
 
 }

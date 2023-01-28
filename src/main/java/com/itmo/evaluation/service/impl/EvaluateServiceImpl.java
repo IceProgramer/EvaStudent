@@ -2,12 +2,15 @@ package com.itmo.evaluation.service.impl;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.itmo.evaluation.common.ErrorCode;
 import com.itmo.evaluation.common.ResultUtils;
+import com.itmo.evaluation.exception.BusinessException;
 import com.itmo.evaluation.mapper.CourseMapper;
 import com.itmo.evaluation.mapper.MarkHistoryMapper;
 import com.itmo.evaluation.mapper.SystemMapper;
 import com.itmo.evaluation.mapper.TeacherMapper;
 import com.itmo.evaluation.model.dto.evaluation.EvaluationPushRequest;
+import com.itmo.evaluation.model.entity.Course;
 import com.itmo.evaluation.model.entity.MarkHistory;
 import com.itmo.evaluation.model.entity.System;
 import com.itmo.evaluation.model.entity.Teacher;
@@ -51,8 +54,14 @@ public class EvaluateServiceImpl implements EvaluateService {
         DecodedJWT decodedJWT = JwtUtil.decodeToken(token);
         Integer studentId = Integer.valueOf(decodedJWT.getClaim("id").asString());
 
+        Course course = courseMapper.selectById(cid);
 
-        String courseName = courseMapper.selectById(cid).getCName();
+        if (course == null) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "您没有该课程信息");
+        }
+
+        String courseName = course.getCName();
+
         // 根据课程名称来获取所有的课程id
         List<Integer> courseIdList = courseMapper.getCourseIdByName(courseName);
         // 根据学生id在mark表中根据cid来筛选出本课程的相关信息

@@ -104,6 +104,11 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
         return token;
     }
 
+    /**
+     * 获取学生基本信息
+     * @param token token
+     * @return 学生id和学生学号
+     */
     @Override
     public StudentVo getLoginStudent(String token) {
         // 对传回来的token进行解析 -> 解析出token中对应用户的id
@@ -129,6 +134,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
      * @param request 请求
      * @return 用户登陆地址和ip
      */
+    @Override
     public String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

@@ -3,11 +3,13 @@ package com.itmo.evaluation.intercepts;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.itmo.evaluation.service.StudentService;
 import com.itmo.evaluation.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -17,10 +19,15 @@ import java.util.Map;
 @Slf4j
 @Component
 public class PermissionIntercept implements HandlerInterceptor {
+
+    @Resource
+    private StudentService studentService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
         try {
+
             // 对Token进行解析
             DecodedJWT dj = JwtUtil.decodeToken(token);
             // 获取数据
@@ -39,7 +46,7 @@ public class PermissionIntercept implements HandlerInterceptor {
                 payload.put("id", id);    // 加入一些非敏感的用户信息
                 String newJwt = JwtUtil.generateToken(payload);
                 // 加入返回头
-                response.addHeader("access-token", newJwt);
+                response.addHeader("token", newJwt);
             }
         } catch (JWTDecodeException e) {
             log.error("令牌错误");
@@ -49,6 +56,9 @@ public class PermissionIntercept implements HandlerInterceptor {
             log.error("令牌过期");
             return false;
         }
+
         return true;
     }
+
+
 }
